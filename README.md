@@ -67,4 +67,4 @@ Open your web browser and navigate to http://localhost:1001.
 * **Custom currencies:** Give users the ability to create their own currencies, beyond the predefined ones.
 * **Export and Import data:** Allow users to export their data for backup or analysis in other software and import data from other sources.
 * **Monthly/Weekly Budget Caps:** Allow users to set a budget cap for specific durations.
-* **Budget notifications:** Notify users when they are close to reaching or have exceeded their budget.
+* **Budget notifications:** Notify users when they are close to reaching or have exceeded their budget
