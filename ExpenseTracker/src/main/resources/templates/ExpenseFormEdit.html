@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.com">
+<head>
+  <title>Edit the Expense</title>
+  <!-- css followed from path /css/style.css -->
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <!-- css followed from bootstarp for menu -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+	<style>
+        h1 {
+            margin-top: 100px;
+        }
+    </style>
+    
+</head>
+<body>
+<!-- top menu of the page -->
+	 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="#">Expense Tracker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active text-white" aria-current="page" href="/dashboard" onclick= "return confirm('Are you sure you want to leave? Changes will get discarded')">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/available_expenses" onclick= "return confirm('Are you sure you want to leave? Changes will get discarded')">Expenses</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link text-white" href="/new_expense" onclick= "return confirm('Are you sure you want to leave? Changes will get discarded')">Add New Expense</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/getchart" onclick= "return confirm('Are you sure you want to leave? Changes will get discarded')">Expense Report</a>
+        </li>
+      </ul>
+      <div class="nav-item">
+    	<span class="nav-link text-white"  id="clickableText"><span th:text="${message}"></span></span>
+    		<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+    </div>
+    </div>
+  </div>
+</nav>
+<!-- The form to edit any existing expense for the user from the list of expenses-->
+  <h1>Edit the Expense</h1>
+  <div class="form-container">
+  <form id="expense-form" th:action="@{/available_expenses/editExpense/update/{id} (id= ${expense.id})}" method="put ">
+    <div class="form-group">
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount" step="0.01" th:value="${expense.amount}" required>
+      </div>
+      <div class="form-group">
+      <label for="currency">Currency:</label>
+      <select id="currency" name="currency" required>
+        <option value="">Select a currency</option>
+        <option value="USD" th:selected="${expense.currency == 'USD'}">USD</option>
+        <option value="INR" th:selected="${expense.currency == 'INR'}">INR</option>
+        <option value="CAD" th:selected="${expense.currency == 'CAD'}">CAD</option>
+       <option value="YEN" th:selected="${expense.currency == 'YEN'}">YEN</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" th:value="${expense.date}" required pattern="\d{2}-\d{2}-\d{4}">
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category:</label>
+      <select id="category" name="category" required>
+        <option value="">Select a category</option>
+        <option value="food" th:selected="${expense.category == 'food'}">Food</option>
+        <option value="transportation" th:selected="${expense.category == 'transportation'}">Transportation</option>
+        <option value="housing" th:selected="${expense.category == 'housing'}">Housing</option>
+        <option value="entertainment" th:selected="${expense.category == 'entertainment'}">Entertainment</option>
+        <option value="shopping" th:selected="${expense.category == 'shopping'}">Shopping</option>
+        <option value="medical" th:selected="${expense.category == 'medical'}">Medical</option>
+        <option value="groceries" th:selected="${expense.category == 'groceries'}">Groceries</option>
+      </select>
+    </div>
+
+    <div class="form-group form-group-description">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" th:text="${expense.description}"></textarea>
+    </div>
+        <div class="form-group form-group-actions">
+    <button type="submit">Edit Expense</button>
+    </div>
+  </form>
+  </div>
+  
+  
+ <!--   <div id="popup" class="popup">
+    <div class="popup-content">
+      <span class="close">&times;</span>
+      <h3>Expense Added Successfully!</h3>
+    </div>
+  </div> -->
+
+  <!--  script to auto-populate the existing value of date  -->
+   <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      // Retrieve the date value from the URL parameter
+      var urlParams = new URLSearchParams(window.location.search);
+      var dateString = urlParams.get('date');
+      
+      // Parse the date string into day, month, and year
+      var dateParts = dateString.split('/');
+      var day = dateParts[0];
+      var month = dateParts[1];
+      var year = dateParts[2];
+      
+      // Format the date as "yyyy-mm-dd"
+      var formattedDate = year + '-' + month + '-' + day;
+      
+      // Set the value of the date input field
+      document.getElementById('date').value = formattedDate;
+    });
+  </script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+		integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+		crossorigin="anonymous"></script>
+</body>
+</html>

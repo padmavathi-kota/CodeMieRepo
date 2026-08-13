@@ -1,0 +1,10 @@
+<static>
+<servlet>
+    <servlet-name>SaveExpenseServlet</servlet-name>
+    <servlet-class>com.example1.crud.domain.SaveExpenseServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>SaveExpenseServlet</servlet-name>
+    <url-pattern>/saveExpense</url-pattern>
+</servlet-mapping>
+</static>

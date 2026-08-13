@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.com" >
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <!-- css followed from bootstarp for menu -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     <script src="https://kit.fontawesome.com/0faddc1af8.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+   
+   <!-- top menu of the page -->
+   <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="#">Expense Tracker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active text-white" aria-current="page" href="/dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/available_expenses">Expenses</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link text-white" href="/new_expense">Add New Expense</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/getchart">Expense Report</a>
+        </li>
+      </ul>
+      <div class="nav-item">
+    	<span class="nav-link text-white"  id="clickableText"><span th:text="${message}"></span></span>
+    		<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+    </div>
+    </div>
+  </div>
+</nav>
+<body>
+    <h1>Expense Report</h1>
+    <canvas id="expenseChart"></canvas>
+
+    <script th:inline="javascript">
+        // Retrieve the monthly totals from the model
+        const monthlyTotals = /*[[${monthlyTotals}]]*/ [];
+
+        // Prepare data for chart
+        const months = Object.keys(monthlyTotals);
+        const amounts = Object.values(monthlyTotals);
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
+
+        // Convert month numbers to month names
+        const monthLabels = months.map(month => monthNames[month - 1]);
+
+
+        // Create chart
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Total Amount Spent',
+                    data: amounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

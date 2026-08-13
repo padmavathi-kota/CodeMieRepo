@@ -1,0 +1,87 @@
+/* styles.css */
+h1 {
+    text-align: center;
+  }
+  
+  .form-container {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 400px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+    margin-right: 180px;
+  }
+  
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 38%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+  }
+.form-group-category {
+    margin-bottom: 10px;
+  }
+  
+  
+  select{
+    margin-bottom: 10px;
+    width: 48%; /* Set the width of the dropdown */
+    padding: 5px;
+  background-color: #fff;
+    
+  }
+  option {
+    padding: 5px;
+  }
+  textarea#description {
+    width: 88%; /* Set the width of the textarea */
+    margin-bottom: 10px
+  }
+  .form-group-actions {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #de6413;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #cb9063;
+  }
+  /* Popup Styles */
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: none;
+  }
+  .popup.show {
+    display: block;
+  }

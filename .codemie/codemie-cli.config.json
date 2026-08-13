@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "activeProfile": "Codemie-SSO",
+  "profiles": {
+    "Codemie-SSO": {
+      "codeMieProject": "padmavathi_kota@epam.com",
+      "provider": "ai-run-sso",
+      "codeMieUrl": "https://codemie.lab.epam.com/",
+      "apiKey": "sso-provided",
+      "baseUrl": "https://codemie.lab.epam.com/code-assistant-api",
+      "model": "claude-4-5-sonnet",
+      "haikuModel": "claude-haiku-4-5-20251001",
+      "sonnetModel": "claude-4-5-sonnet",
+      "opusModel": "claude-opus-5",
+      "name": "Codemie-SSO"
+    }
+  }
+}
