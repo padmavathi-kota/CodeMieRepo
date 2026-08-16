@@ -4,13 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.expense.entity.Expense;
 import com.expense.service.ExpenseService;
+import com.expense.time.AppTimeService;
 
 import java.security.Principal;
+import javax.validation.Valid;
 //import com.expense.service.MyBookListService;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,8 +29,10 @@ public class ExpenseController {
 	
 	@Autowired
 	private ExpenseService service;
-	
-	
+
+	@Autowired
+	private AppTimeService appTimeService;
+
 	//private MyBookListService myBookService;
 	@GetMapping("/")
 	public String homedef() {
@@ -46,6 +51,8 @@ public class ExpenseController {
 	public String Newexpense(Model model) {
 		String message = (String) model.getAttribute("message");
         model.addAttribute("message", message);
+        model.addAttribute("expense", new Expense());
+        addAppTimeModelAttributes(model);
 		return "ExpenseForm";
 	}
 	
@@ -62,7 +69,12 @@ public class ExpenseController {
 	}
 	
 	@PostMapping("/save")
-	public String addExpense(@ModelAttribute Expense b, Principal p) {
+	public String addExpense(@Valid @ModelAttribute Expense b, BindingResult bindingResult, Model model, Principal p) {
+		if (bindingResult.hasErrors()) {
+            addAppTimeModelAttributes(model);
+            return "ExpenseForm";
+        }
+
 		String email= p.getName();
 		service.save(b,email);
 		return "redirect:/available_expenses";
@@ -87,8 +99,7 @@ public class ExpenseController {
 		String email= p.getName();
 		Expense expense=service.getById(id,email);
 		model.addAttribute("expense",expense);
-		
-		    
+		model.addAttribute("appTimeZone", appTimeService.getTimeZoneId());
 		return "ExpenseFormEdit";
 	}
 	@RequestMapping("/deleteExpense/{id}")
@@ -98,7 +109,12 @@ public class ExpenseController {
 		return "redirect:/available_expenses";
 	}
 	@RequestMapping(value="/available_expenses/editExpense/update/{id}", method= {RequestMethod.GET, RequestMethod.PUT})
-	public String updateExpense(@ModelAttribute Expense expense, Principal p) {
+	public String updateExpense(@Valid @ModelAttribute Expense expense, BindingResult bindingResult, Model model, Principal p) {
+		if (bindingResult.hasErrors()) {
+            model.addAttribute("appTimeZone", appTimeService.getTimeZoneId());
+            return "ExpenseFormEdit";
+        }
+
 		String email= p.getName();
 		service.save(expense, email);
 		return "redirect:/available_expenses";
@@ -120,5 +136,10 @@ public class ExpenseController {
 
 	    return "ExpenseChart"; // Return the view name for the chart
 	}
+
+	private void addAppTimeModelAttributes(Model model) {
+        model.addAttribute("appTimeZone", appTimeService.getTimeZoneId());
+        model.addAttribute("appToday", appTimeService.todayIso());
+    }
 
 }
