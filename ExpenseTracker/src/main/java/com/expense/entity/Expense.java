@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,6 +21,8 @@ public class Expense {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+
+	@NotNull(message = "Date is required")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
     private String category;

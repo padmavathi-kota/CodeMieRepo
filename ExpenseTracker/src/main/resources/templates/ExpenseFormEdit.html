@@ -13,6 +13,14 @@
         h1 {
             margin-top: 100px;
         }
+        .field-error {
+            color: #b00020;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        .input-error {
+            border: 1px solid #b00020;
+        }
     </style>
     
 </head>
@@ -53,7 +61,7 @@
 <!-- The form to edit any existing expense for the user from the list of expenses-->
   <h1>Edit the Expense</h1>
   <div class="form-container">
-  <form id="expense-form" th:action="@{/available_expenses/editExpense/update/{id} (id= ${expense.id})}" method="put ">
+  <form id="expense-form" th:action="@{/available_expenses/editExpense/update/{id} (id= ${expense.id})}" th:object="${expense}" method="put">
     <div class="form-group">
       <label for="amount">Amount:</label>
       <input type="number" id="amount" name="amount" step="0.01" th:value="${expense.amount}" required>
@@ -71,7 +79,18 @@
 
     <div class="form-group">
       <label for="date">Date:</label>
-      <input type="date" id="date" name="date" th:value="${expense.date}" required pattern="\d{2}-\d{2}-\d{4}">
+      <input type="date"
+             id="date"
+             name="date"
+             th:field="*{date}"
+             required
+             pattern="\d{4}-\d{2}-\d{2}"
+             th:classappend="${#fields.hasErrors('date')} ? 'input-error' : ''">
+      <div class="field-error"
+           th:if="${#fields.hasErrors('date')}"
+           th:errors="*{date}">
+          Date error
+      </div>
     </div>
 
     <div class="form-group">
@@ -106,25 +125,14 @@
     </div>
   </div> -->
 
-  <!--  script to auto-populate the existing value of date  -->
-   <script>
-    window.addEventListener('DOMContentLoaded', function() {
-      // Retrieve the date value from the URL parameter
-      var urlParams = new URLSearchParams(window.location.search);
-      var dateString = urlParams.get('date');
-      
-      // Parse the date string into day, month, and year
-      var dateParts = dateString.split('/');
-      var day = dateParts[0];
-      var month = dateParts[1];
-      var year = dateParts[2];
-      
-      // Format the date as "yyyy-mm-dd"
-      var formattedDate = year + '-' + month + '-' + day;
-      
-      // Set the value of the date input field
-      document.getElementById('date').value = formattedDate;
-    });
+  <!-- Script for edit form - NO date defaulting (preserves existing date) -->
+  <script th:inline="javascript">
+    // Edit form intentionally does NOT default date to today.
+    // Design Ref: Confluence 2912165822 (Don't overwrite date in edit mode)
+    const APP_TIMEZONE = /*[[${appTimeZone}]]*/ 'UTC';
+
+    // No date defaulting logic - Thymeleaf th:field will populate from expense.date
+    console.log('Edit mode - preserving existing date. App timezone:', APP_TIMEZONE);
   </script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
