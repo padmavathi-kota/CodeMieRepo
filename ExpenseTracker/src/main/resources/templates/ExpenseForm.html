@@ -64,11 +64,11 @@
   <form id="expense-form" th:action="@{/save}" th:object="${expense}" method="post">
     <div class="form-group">
       <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount" step="0.01" required>
+      <input type="number" id="amount" th:field="*{amount}" step="0.01" required>
       </div>
       <div class="form-group">
       <label for="currency">Currency:</label>
-      <select id="currency" name="currency" required>
+      <select id="currency" th:field="*{currency}" required>
         <option value="">Select a currency</option>
         <option value="USD">USD</option>
         <option value="INR">INR</option>
@@ -95,7 +95,7 @@
 
     <div class="form-group">
       <label for="category">Category:</label>
-      <select id="category" name="category" required>
+      <select id="category" th:field="*{category}" required>
         <option value="">Select a category</option>
         <option value="food">Food</option>
         <option value="transportation">Transportation</option>
@@ -109,7 +109,7 @@
 
     <div class="form-group form-group-description">
         <label for="description">Description:</label>
-        <textarea id="description" name="description" rows="4"></textarea>
+        <textarea id="description" th:field="*{description}" rows="4"></textarea>
     </div>
         <div class="form-group form-group-actions">
     <button type="submit">Add Expense</button>

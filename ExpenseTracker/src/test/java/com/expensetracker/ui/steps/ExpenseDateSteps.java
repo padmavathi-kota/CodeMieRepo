@@ -3,6 +3,7 @@ package com.expensetracker.ui.steps;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.*;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
@@ -25,6 +26,7 @@ public class ExpenseDateSteps {
 
     @Before
     public void setUp() {
+        WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
