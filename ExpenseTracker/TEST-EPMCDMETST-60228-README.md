@@ -52,11 +52,33 @@ mvn clean test -Dtest=EPMCDMETST60228TestRunner
 2. JSON Report: target/cucumber-reports/EPMCDMETST-60228.json
 3. JUnit XML: target/cucumber-reports/EPMCDMETST-60228.xml
 
-## Traceability Matrix
+## Traceability Matrix — EPMCDMETST-60228
 
-| Jira ID | Acceptance Criteria | Test Scenario | Status |
-|---------|-------------------|---------------|---------|
-| EPMCDMETST-60228 | AC1: Add Expense defaults to today | New expense form defaults date | Automated |
-| EPMCDMETST-60228 | AC1: Date is editable | User can override default date | Automated |
-| EPMCDMETST-60228 | AC2: Submit with default date | Submit with default date | Automated |
-| EPMCDMETST-60228 | AC3: Edit preserves date | Edit preserves existing date | Automated |
+| Jira AC | Requirement | Gherkin Scenario / Outline | Tags | Key Automation Implementation |
+|---|---|---|---|---|
+| **AC1** | Add Expense form defaults **Date** to **today** in application timezone | `Scenario: New expense form defaults date to today in application timezone "UTC"` | `@smoke @critical @Jira-EPMCDMETST-60228` | Feature: `src/test/resources/features/EPMCDMETST-60228_DefaultExpenseDate.feature` • Steps: `ExpenseDateEnhancedSteps.java` |
+| **AC1** | User can override default date on new expense | `Scenario: User can override the default date on new expense` | `@regression @functional @Jira-EPMCDMETST-60228` | Steps validate date editability/override behavior via UI interactions |
+| **AC2** | New expense can be submitted using default date | `Scenario: New expense can be submitted with default date` | `@regression @critical @Jira-EPMCDMETST-60228` | Steps cover submit flow and verify saved record has expected date |
+| **AC2** | Date is required and cannot be empty | `Scenario: Date field is required and cannot be empty` | `@regression @validation @Jira-EPMCDMETST-60228` | Steps clear the date field and assert validation message / submit blocked behavior |
+| **AC3** | Edit expense preserves existing date (does not override to today) | `Scenario: Edit expense preserves existing date (does not override to today)` | `@regression @edit @critical @Jira-EPMCDMETST-60228` | Steps create/select an expense with a non-today date, open edit, and verify date remains unchanged |
+| (Edge) | Boundary/edge date values supported and persist correctly | `Scenario Outline: New expense accepts valid date formats` with Examples (`2026-01-01`, `2026-12-31`, `2026-08-16`) | `@regression @boundary @Jira-EPMCDMETST-60228` | Data-driven UI input + assertion of saved/displayed date |
+
+### Runner / Execution Entry Point
+- Runner: `src/test/java/com/expensetracker/ui/runners/EPMCDMETST60228TestRunner.java`
+- Command:
+  ```bash
+  mvn clean test -Dtest=EPMCDMETST60228TestRunner
+  ```
+
+### Report Outputs
+- `target/cucumber-reports/EPMCDMETST-60228.html`
+- `target/cucumber-reports/EPMCDMETST-60228.json`
+
+### Execution Prerequisites
+See: `ExpenseTracker/docs/test-execution/EPMCDMETST-60228_Execution.md`  
+(Key dependencies: app running on port `1001`, MySQL on `localhost:3306`, and `baseUrl=http://localhost:1001` in `config.properties`.)
+
+## Detailed Execution Guide
+For comprehensive setup instructions including Docker MySQL configuration, troubleshooting, and step-by-step execution procedures, refer to:
+
+**[EPMCDMETST-60228 Execution Guide](docs/test-execution/EPMCDMETST-60228_Execution.md)**
